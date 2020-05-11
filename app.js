@@ -159,7 +159,8 @@ app.get('/logout', (req, res) => {
 async function getRandomAlbums(req) {
   const data = await api.getAlbums(req.user.token);
   let albums = data.albums;
-  return _randomItems(albums, Math.round(albums.length / 3));
+  //return _randomItems(albums, Math.round(albums.length / 3));
+  return _randomItems(albums, 2);
 }
 
 
