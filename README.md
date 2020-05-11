@@ -1,17 +1,13 @@
-# Photo Frame Sample
+# Photo Frame Application
 
-This is a Node.js sample application for the [Google Photos Library API](https://developers.google.com/photos).
+This is a Node.js application for the [Google Photos Library API](https://developers.google.com/photos).
 
-This sample shows how to connect an app with Google Photos through OAuth 2.0 and display a user's photos and albums in an "online photo frame".
+It connects an app with Google Photos through OAuth 2.0 and display a user's photos in an "online photo frame".
 
 This app is built using [Express.js](https://expressjs.com/) and [Material Design Lite](https://getmdl.io/).
 
 ## App Overview
-This web app is an online photo frame that allows users to load photos from a search, an album or the library and then show these images in a full screen slideshow.
-
-## Screenshots
-![Screenshot of photo frame](images/preview.png)
-![Screenshot of login screen](images/login.png)
+This web app is an online photo frame that allows users to load photos and then show these images in a full screen slideshow.
 
 ## Set up
 Before you can run this sample, you must set up a Google Developers project and configure authentication credentials. Follow the
