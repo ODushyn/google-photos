@@ -1,0 +1,4 @@
+{
+  "watch": ["app.js", "config.js", "auth.js", "api.js", "logger.js", "static/js/", "views/pages/"],
+  "ext": "js, css, ejs"
+}

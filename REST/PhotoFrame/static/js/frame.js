@@ -1,16 +1,16 @@
-// Copyright 2018 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+$(document).ready(async () => {
+  await loadImages();
+  setUpFancyBox();
+
+  // Clicking the 'view fullscreen' button opens the gallery from the first image.
+  $('#startSlideshow')
+    .on('click', (e) => $('#images-container a').first().click());
+
+  // Clicking log out opens the log out screen.
+  $('#logout').on('click', (e) => {
+    window.location = '/logout';
+  });
+});
 
 // Empties the grid of images.
 function clearPreview() {
@@ -24,6 +24,7 @@ function clearPreview() {
 // Each photo is displayed through the fancybox library for full screen and
 // caption support.
 function showPreview(source, mediaItems) {
+
   $('#images-container').empty();
 
   // Display the length and the source of the items if set.
@@ -54,13 +55,13 @@ function showPreview(source, mediaItems) {
     // Constuct the URL to the image in its original size based on its width and
     // height.
     const fullUrl = `${item.baseUrl}=w${item.mediaMetadata.width}-h${
-        item.mediaMetadata.height}`;
+      item.mediaMetadata.height}`;
 
     // Compile the caption, conisting of the description, model and time.
     const description = item.description ? item.description : '';
     const model = item.mediaMetadata.photo.cameraModel ?
-        `#Shot on ${item.mediaMetadata.photo.cameraModel}` :
-        '';
+      `#Shot on ${item.mediaMetadata.photo.cameraModel}` :
+      '';
     const time = item.mediaMetadata.creationTime;
     const captionText = `${description} ${model} (${time})`
 
@@ -72,24 +73,24 @@ function showPreview(source, mediaItems) {
     // The original width and height are part of the mediaMetadata of
     // an image media item from the API.
     const linkToFullImage = $('<a />')
-                                .attr('href', fullUrl)
-                                .attr('data-fancybox', 'gallery')
-                                .attr('data-width', item.mediaMetadata.width)
-                                .attr('data-height', item.mediaMetadata.height);
+      .attr('href', fullUrl)
+      .attr('data-fancybox', 'gallery')
+      .attr('data-width', item.mediaMetadata.width)
+      .attr('data-height', item.mediaMetadata.height);
     // Add the thumbnail image to the link to the full image for fancybox.
     const thumbnailImage = $('<img />')
-                               .attr('src', thumbnailUrl)
-                               .attr('alt', captionText)
-                               .addClass('img-fluid rounded thumbnail');
+      .attr('src', thumbnailUrl)
+      .attr('alt', captionText)
+      .addClass('img-fluid rounded thumbnail');
     linkToFullImage.append(thumbnailImage);
 
     // The caption consists of the caption text and a link to open the image
     // in Google Photos.
     const imageCaption =
-        $('<figcaption />').addClass('hidden').text(captionText);
+      $('<figcaption />').addClass('hidden').text(captionText);
     const linkToGooglePhotos = $('<a />')
-                                   .attr('href', item.productUrl)
-                                   .text('[Click to open in Google Photos]');
+      .attr('href', item.productUrl)
+      .text('[Click to open in Google Photos]');
     imageCaption.append($('<br />'));
     imageCaption.append(linkToGooglePhotos);
     linkToFullImage.append(imageCaption);
@@ -103,34 +104,54 @@ function showPreview(source, mediaItems) {
 // Makes a backend request to display the queue of photos currently loaded into
 // the photo frame. The backend returns a list of media items that the user has
 // selected. They are rendered in showPreview(..).
-function loadQueue() {
+async function loadImages(refresh= false) {
   showLoadingDialog();
-  $.ajax({
-    type: 'GET',
-    url: '/getQueue',
-    dataType: 'json',
-    success: (data) => {
-      // Queue has been loaded. Display the media items as a grid on screen.
-      hideLoadingDialog();
-      showPreview(data.parameters, data.photos);
-      hideLoadingDialog();
-      console.log('Loaded queue.');
-    },
-    error: (data) => {
-      hideLoadingDialog();
-      handleError('Could not load queue', data)
-    }
-  });
+
+  return _loadRandomImages();
+
+  async function _loadRandomImages() {
+    return $.ajax({
+      type: 'GET',
+      url: '/photos',
+      dataType: 'json',
+      data: {
+        refresh: refresh
+      },
+      success: (data) => {
+        hideLoadingDialog();
+        showPreview(data.parameters, data.photos);
+      },
+      error: (data) => {
+        hideLoadingDialog();
+        handleError('Could not load queue', data)
+      }
+    });
+  }
 }
 
-$(document).ready(() => {
-  // Load the queue of photos selected by the user for the photo
-  loadQueue();
-
-  // Set up the fancybox image gallery.
+function setUpFancyBox() {
+  let loopIsOver = false;
+  let newImagesLoaded = false;
   $().fancybox({
     selector: '[data-fancybox="gallery"]',
     loop: true,
+    afterShow: function (box) {
+      if (box.currIndex === Math.round(box.group.length * 0.7)) {
+        if (!newImagesLoaded) {
+          loadImages(true).then(() => newImagesLoaded = true);
+        }
+      }
+      if (box.currIndex === box.group.length - 1 && newImagesLoaded) {
+        loopIsOver = true;
+        $.fancybox.close();
+      }
+    },
+    afterClose: function () {
+      if (loopIsOver && newImagesLoaded) {
+        setUpFancyBox();
+        $('#images-container a').first().click();
+      }
+    },
     buttons: ['slideShow', 'fullScreen', 'close'],
     image: {preload: true},
     transitionEffect: 'fade',
@@ -139,18 +160,8 @@ $(document).ready(() => {
     // Automatically advance after 3s to next photo.
     slideShow: {autoStart: true, speed: 3000},
     // Display the contents figcaption element as the caption of an image
-    caption: function(instance, item) {
+    caption: function (instance, item) {
       return $(this).find('figcaption').html();
     }
   });
-
-  // Clicking the 'view fullscreen' button opens the gallery from the first
-  // image.
-  $('#startSlideshow')
-      .on('click', (e) => $('#images-container a').first().click());
-
-  // Clicking log out opens the log out screen.
-  $('#logout').on('click', (e) => {
-    window.location = '/logout';
-  });
-});
+}

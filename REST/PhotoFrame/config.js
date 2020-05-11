@@ -17,10 +17,10 @@
 const config = {};
 
 // The OAuth client ID from the Google Developers console.
-config.oAuthClientID = 'ADD YOUR CLIENT ID';
+config.oAuthClientID = '92563446073-7gbhq3fqe936ep0fcft9e1j1te3guhvi.apps.googleusercontent.com';
 
 // The OAuth client secret from the Google Developers console.
-config.oAuthclientSecret = 'ADD YOUR CLIENT SECRET';
+config.oAuthclientSecret = 'TSOnG3vLNmSWccvXS5lawkuh';
 
 // The callback to use for OAuth requests. This is the URL where the app is
 // running. For testing and running it locally, use 127.0.0.1.
@@ -36,13 +36,16 @@ config.scopes = [
   'profile',
 ];
 
+// The number of photos to load per album for the photo frame
+config.photosPerAlbum = 2;
+
 // The number of photos to load for search requests.
 config.photosToLoad = 150;
 
-// The page size to use for search requests. 100 is reccommended.
+// The page size to use for search requests. 100 is recommended.
 config.searchPageSize = 100;
 
-// The page size to use for the listing albums request. 50 is reccommended.
+// The page size to use for the listing albums request. 50 is recommended.
 config.albumPageSize = 50;
 
 // The API end point to use. Do not change.
