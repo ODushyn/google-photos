@@ -222,9 +222,9 @@ function shuffle(array) {
 }
 
 // Start the server
-server.listen(config.port, () => {
-  console.log(`App listening on port ${config.port}`);
-  console.log('Press Ctrl+C to quit.');
+const listener = server.listen(process.env.PORT || config.port, () => {
+  console.log("Your app is listening on port " + listener.address().port);
+  console.log(listener.address());
 });
 
 // Responds with an error status code and the encapsulated data.error.
