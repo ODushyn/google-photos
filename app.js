@@ -6,6 +6,7 @@ const config = require('./config.js');
 const express = require('express');
 const expressWinston = require('express-winston');
 const http = require('http');
+const path = require('path');
 const persist = require('node-persist');
 const session = require('express-session');
 const sessionFileStore = require('session-file-store');
@@ -116,6 +117,10 @@ app.get('/', (req, res) => {
   } else {
     res.render('pages/frame');
   }
+});
+
+app.get('/googlea24351d6b803c6e8.html', function(req, res) {
+  res.sendFile(path.join(__dirname, '/views/googlea24351d6b803c6e8.html'));
 });
 
 // Star the OAuth login process for Google.
