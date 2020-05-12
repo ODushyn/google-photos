@@ -27,7 +27,7 @@ config.oAuthclientSecret = process.env.AUTH_CLIENT_SECRET;
 config.oAuthCallbackUrl = process.env.AUTH_CALLBACK;
 
 //Session secret
-config.sessionSecret = 'qskL1xqWj9jBAiUtsBk';
+config.sessionSecret = process.env.sessionSecret;
 
 // The port where the app should listen for requests.
 config.port = 8080;
