@@ -46,7 +46,7 @@ const sessionMiddleware = session({
   resave: true,
   saveUninitialized: true,
   store: new fileStore({}),
-  secret: 'photo frame sample',
+  secret: config.sessionSecret,
 });
 
 // Enable extensive logging if the DEBUG environment variable is set.

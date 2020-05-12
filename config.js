@@ -26,6 +26,9 @@ config.oAuthclientSecret = process.env.AUTH_CLIENT_SECRET;
 // running. For testing and running it locally, use 127.0.0.1.
 config.oAuthCallbackUrl = process.env.AUTH_CALLBACK;
 
+//Session secret
+config.sessionSecret = 'qskL1xqWj9jBAiUtsBk';
+
 // The port where the app should listen for requests.
 config.port = 8080;
 
