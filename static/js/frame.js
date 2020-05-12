@@ -1,7 +1,7 @@
 $(document).ready(async () => {
-  // TODO uncomment
-  // await loadImages();
-  // setUpFancyBox();
+  console.log('new?!?!?');
+  await loadImages();
+  setUpFancyBox();
 
   // Clicking the 'view fullscreen' button opens the gallery from the first image.
   $('#startSlideshow')
@@ -158,8 +158,8 @@ function setUpFancyBox() {
     transitionEffect: 'fade',
     transitionDuration: 1000,
     fullScreen: {autoStart: false},
-    // Automatically advance after 3s to next photo.
-    slideShow: {autoStart: true, speed: 3000},
+    // Automatically advance after 45s to next photo.
+    slideShow: {autoStart: true, speed: 45000},
     // Display the contents figcaption element as the caption of an image
     caption: function (instance, item) {
       return $(this).find('figcaption').html();
