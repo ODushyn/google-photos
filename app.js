@@ -14,8 +14,7 @@ const sessionFileStore = require('session-file-store');
 const logger = require('./logger');
 const app = express();
 const fileStore = sessionFileStore(session);
-//TODO: uncomment and change .listen
-//const server = http.Server(app);
+const server = http.Server(app);
 
 // Use the EJS template engine
 app.set('view engine', 'ejs');
@@ -228,7 +227,7 @@ function shuffle(array) {
 }
 
 // Start the server
-const listener = app.listen(process.env.PORT || config.port, () => {
+const listener = server.listen(process.env.PORT || config.port, () => {
   console.log("Your app is listening on port " + listener.address().port);
   console.log(listener.address());
 });
