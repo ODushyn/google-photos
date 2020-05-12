@@ -16,6 +16,13 @@ const config = require('./config.js');
 
 const GoogleOAuthStrategy = require('passport-google-oauth20').Strategy;
 module.exports = (passport) => {
+  // TODO remove
+  console.log("------Config-------")
+  console.log(config.oAuthClientID);
+  console.log(config.oAuthclientSecret);
+  console.log(config.oAuthCallbackUrl);
+  console.log("-----------------")
+
   passport.serializeUser((user, done) => done(null, user));
   passport.deserializeUser((user, done) => done(null, user));
   passport.use(new GoogleOAuthStrategy(

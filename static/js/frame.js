@@ -1,6 +1,7 @@
 $(document).ready(async () => {
-  await loadImages();
-  setUpFancyBox();
+  // TODO uncomment
+  // await loadImages();
+  // setUpFancyBox();
 
   // Clicking the 'view fullscreen' button opens the gallery from the first image.
   $('#startSlideshow')
