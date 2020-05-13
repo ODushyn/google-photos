@@ -167,7 +167,7 @@ function setUpFancyBox() {
     image: {preload: true},
     transitionEffect: 'fade',
     transitionDuration: 1000,
-    fullScreen: {autoStart: false},
+    fullScreen: {autoStart: true},
     // Automatically advance after 45s to next photo.
     slideShow: {autoStart: true, speed: 45000},
     // Display the contents figcaption element as the caption of an image
