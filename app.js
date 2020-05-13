@@ -170,20 +170,21 @@ async function getRandomAlbums(req) {
 
 
 async function getRandomPhotos(randomAlbums, authToken, res, userId) {
-  let photos = [];
+  let result = [];
   const forLoop = async _ => {
     for (let i = 0; i < randomAlbums.length; i++) {
       const parameters = {albumId: randomAlbums[i].id};
       const data = await api.search(authToken, parameters);
-      photos.push(..._randomItems(fetchPhotos(res, userId, data), Math.ceil(randomAlbums.length / 10)));
+      const photos = fetchPhotos(res, userId, data);
+      result.push(..._randomItems(photos, Math.ceil(photos.length / 20)));
     }
-    shuffle(photos);
+    shuffle(result);
   }
   await forLoop();
 
-  mediaItemCache.setItemSync(userId, photos);
+  mediaItemCache.setItemSync(userId, result);
 
-  return photos;
+  return result;
 
   function fetchPhotos(res, userId, data) {
     if (data.error) {
