@@ -60,11 +60,8 @@ function showPreview(source, mediaItems) {
 
     // Compile the caption, conisting of the description, model and time.
     const description = item.description ? item.description : '';
-    const model = item.mediaMetadata.photo.cameraModel ?
-      `#Shot on ${item.mediaMetadata.photo.cameraModel}` :
-      '';
-    const time = item.mediaMetadata.creationTime;
-    const captionText = `${description} ${model} (${time})`
+    const time = _convertDate(item.mediaMetadata.creationTime);
+    const captionText = `${description} ${time}`
 
     // Each image is wrapped by a link for the fancybox gallery.
     // The data-width and data-height attributes are set to the
@@ -88,11 +85,11 @@ function showPreview(source, mediaItems) {
     // The caption consists of the caption text and a link to open the image
     // in Google Photos.
     const imageCaption =
-      $('<figcaption />').addClass('hidden').text(captionText);
+      $('<figcaption />').addClass('hidden');
     const linkToGooglePhotos = $('<a />')
       .attr('href', item.productUrl)
-      .text('[Click to open in Google Photos]');
-    imageCaption.append($('<br />'));
+      .text(captionText);
+    //imageCaption.append($('<br />'));
     imageCaption.append(linkToGooglePhotos);
     linkToFullImage.append(imageCaption);
 
@@ -100,6 +97,16 @@ function showPreview(source, mediaItems) {
     // container.
     $('#images-container').append(linkToFullImage);
   });
+
+  function _convertDate(dateStr) {
+    let date = new Date(dateStr);
+    let day = date.getDate();
+    day = day < 10 ? "0" + day : day;
+    let month = date.getMonth() + 1;
+    month = month < 10 ? "0" + month : month;
+    let year = date.getFullYear();
+    return day + "." + month + "." + year;
+  }
 };
 
 // Makes a backend request to display the queue of photos currently loaded into
@@ -136,6 +143,12 @@ function setUpFancyBox() {
   $().fancybox({
     selector: '[data-fancybox="gallery"]',
     loop: true,
+    //TODO: hide progress bar
+    onInit: function() {
+      if( window.innerHeight == screen.height) {
+        console.log('full');
+      }
+    },
     afterShow: function (box) {
       if (box.currIndex === Math.round(box.group.length * 0.7)) {
         if (!newImagesLoaded) {

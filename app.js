@@ -143,10 +143,10 @@ app.get('/auth/google/callback',
 app.get('/photos', async (req, res) => {
   const userId = req.user.profile.id;
   const authToken = req.user.token;
-  const refresh = !!req.query.refresh;
+  const refresh = (req.query.refresh === "true");
 
   let cachedPhotos = mediaItemCache.getItemSync(userId);
-  if (refresh && !!cachedPhotos) {
+  if (!refresh && (cachedPhotos && cachedPhotos.length > 0)) {
     res.send({photos: cachedPhotos})
   } else {
     let albums = await getRandomAlbums(req, res, userId);
@@ -164,8 +164,8 @@ app.get('/logout', (req, res) => {
 async function getRandomAlbums(req) {
   const data = await api.getAlbums(req.user.token);
   let albums = data.albums;
-  //return _randomItems(albums, Math.round(albums.length / 3));
-  return _randomItems(albums, 2);
+  //return _randomItems(albums, 2);
+  return _randomItems(albums, Math.round(albums.length / 3));
 }
 
 
