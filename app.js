@@ -165,7 +165,7 @@ async function getRandomAlbums(req) {
   const data = await api.getAlbums(req.user.token);
   let albums = data.albums;
   //return _randomItems(albums, 2);
-  return _randomItems(albums, Math.round(albums.length / 3));
+  return _randomItems(albums, Math.round(albums.length / 15));
 }
 
 
@@ -175,7 +175,7 @@ async function getRandomPhotos(randomAlbums, authToken, res, userId) {
     for (let i = 0; i < randomAlbums.length; i++) {
       const parameters = {albumId: randomAlbums[i].id};
       const data = await api.search(authToken, parameters);
-      photos.push(..._randomItems(fetchPhotos(res, userId, data), config.photosPerAlbum));
+      photos.push(..._randomItems(fetchPhotos(res, userId, data), Math.ceil(randomAlbums.length / 10)));
     }
     shuffle(photos);
   }
