@@ -149,10 +149,6 @@ function setUpFancyBox() {
       }
     },
     afterShow: function (box) {
-      //TODO remove
-      console.log(box.currIndex);
-      console.log(Math.round(box.group.length * 0.7));
-      console.log(newImagesLoaded)
       if (box.currIndex === Math.round(box.group.length * 0.7)) {
           loadImages(true).then(() => newImagesLoaded = true);
       }
@@ -173,8 +169,7 @@ function setUpFancyBox() {
     transitionDuration: 1000,
     fullScreen: {autoStart: false},
     // Automatically advance after 45s to next photo.
-    //TODO increase to 45000
-    slideShow: {autoStart: true, speed: 4000},
+    slideShow: {autoStart: true, speed: 45000},
     // Display the contents figcaption element as the caption of an image
     caption: function (instance, item) {
       return $(this).find('figcaption').html();
