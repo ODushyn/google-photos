@@ -6,6 +6,9 @@ $(document).ready(async () => {
   $('#startSlideshow')
     .on('click', (e) => $('#images-container a').first().click());
 
+  $('#refreshPhotos')
+    .on('click', (e) => {loadImages(); setUpFancyBox();});
+
   // Clicking log out opens the log out screen.
   $('#logout').on('click', (e) => {
     window.location = '/logout';
@@ -142,10 +145,10 @@ function setUpFancyBox() {
   $().fancybox({
     selector: '[data-fancybox="gallery"]',
     loop: true,
-    //TODO: hide progress bar
-    onInit: function() {
-      if( window.innerHeight == screen.height) {
-        console.log('full');
+    beforeLoad: function() {
+      // when fullscreen remove progress bar
+      if(Math.abs(window.innerHeight - screen.height) < 2) {
+        $('.fancybox-progress').remove();
       }
     },
     afterShow: function (box) {
@@ -158,7 +161,7 @@ function setUpFancyBox() {
       }
     },
     afterClose: function () {
-      if (loopIsOver && newImagesLoaded) {
+      if (loopIsOver) {
         setUpFancyBox();
         $('#images-container a').first().click();
       }
@@ -167,7 +170,6 @@ function setUpFancyBox() {
     image: {preload: true},
     transitionEffect: 'fade',
     transitionDuration: 1000,
-    fullScreen: {autoStart: true},
     // Automatically advance after 45s to next photo.
     slideShow: {autoStart: true, speed: 45000},
     // Display the contents figcaption element as the caption of an image
