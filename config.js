@@ -29,6 +29,10 @@ config.oAuthCallbackUrl = process.env.AUTH_CALLBACK;
 //Session secret
 config.sessionSecret = process.env.sessionSecret;
 
+// Refresh token. It is hardcoded for my particular google user
+config.refreshToken = process.env.REFRESH_TOKEN;
+
+
 // The port where the app should listen for requests.
 config.port = 8080;
 
@@ -38,9 +42,6 @@ config.scopes = [
   'https://www.googleapis.com/auth/photoslibrary.readonly',
   'profile',
 ];
-
-// The number of photos to load per album for the photo frame
-config.photosPerAlbum = 2;
 
 // The number of photos to load for search requests.
 config.photosToLoad = 150;

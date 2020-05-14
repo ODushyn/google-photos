@@ -119,7 +119,7 @@ app.get('/', (req, res) => {
   }
 });
 
-app.get('/googlea24351d6b803c6e8.html', function(req, res) {
+app.get('/googlea24351d6b803c6e8.html', function (req, res) {
   res.sendFile(path.join(__dirname, '/views/googlea24351d6b803c6e8.html'));
 });
 
@@ -128,6 +128,9 @@ app.get('/auth/google', passport.authenticate('google', {
   scope: config.scopes,
   failureFlash: true,  // Display errors to the user.
   session: true,
+  // prompt: 'consent',
+  // Used to retrieve new refresh token
+  // accessType: 'offline'
 }));
 
 // Callback receiver for the OAuth process after log in.
@@ -149,8 +152,8 @@ app.get('/photos', async (req, res) => {
   if (!refresh && (cachedPhotos && cachedPhotos.length > 0)) {
     res.send({photos: cachedPhotos})
   } else {
-    let albums = await getRandomAlbums(req, res, userId);
-    let photos = await getRandomPhotos(albums, authToken, res, userId);
+    let albums = await getRandomAlbums(req, res);
+    let photos = await getRandomPhotos(albums, req, res, userId);
     res.send({photos})
   }
 })
@@ -161,20 +164,20 @@ app.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
-async function getRandomAlbums(req) {
-  const data = await api.getAlbums(req.user.token);
+async function getRandomAlbums(req, res) {
+  const data = await api.getAlbums(req, res);
   let albums = data.albums;
   //return _randomItems(albums, 2);
   return _randomItems(albums, Math.round(albums.length / 15));
 }
 
 
-async function getRandomPhotos(randomAlbums, authToken, res, userId) {
+async function getRandomPhotos(randomAlbums, req, res, userId) {
   let result = [];
   const forLoop = async _ => {
     for (let i = 0; i < randomAlbums.length; i++) {
       const parameters = {albumId: randomAlbums[i].id};
-      const data = await api.search(authToken, parameters);
+      const data = await api.search(req, res, parameters);
       const photos = fetchPhotos(res, userId, data);
       result.push(..._randomItems(photos, Math.ceil(photos.length / 20)));
     }
