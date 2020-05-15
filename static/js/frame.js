@@ -146,10 +146,8 @@ function setUpFancyBox() {
     selector: '[data-fancybox="gallery"]',
     loop: true,
     beforeLoad: function() {
-      // when fullscreen remove progress bar
-      if(Math.abs(window.innerHeight - screen.height) < 2) {
-        $('.fancybox-progress').remove();
-      }
+      // remove progress bar
+      $('.fancybox-progress').remove();
     },
     afterShow: function (box) {
       if (box.currIndex === Math.round(box.group.length * 0.7)) {
