@@ -7,7 +7,7 @@ $(document).ready(async () => {
     .on('click', (e) => $('#images-container a').first().click());
 
   $('#refreshPhotos')
-    .on('click', (e) => {loadImages(); setUpFancyBox();});
+    .on('click', (e) => {loadImages(true); setUpFancyBox();});
 
   // Clicking log out opens the log out screen.
   $('#logout').on('click', (e) => {
